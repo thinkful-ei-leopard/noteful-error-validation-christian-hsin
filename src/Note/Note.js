@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ApiContext from '../ApiContext'
 import config from '../config'
 import './Note.css'
+import PropTypes from 'prop-types';
 
 export default class Note extends React.Component {
   static defaultProps ={
@@ -15,7 +16,7 @@ export default class Note extends React.Component {
   handleClickDelete = e => {
     e.preventDefault()
     const noteId = this.props.id
-
+console.log(noteId)
     fetch(`${config.API_ENDPOINT}/notes/${noteId}`, {
       method: 'DELETE',
       headers: {
@@ -49,10 +50,8 @@ export default class Note extends React.Component {
         <button
           className='Note__delete'
           type='button'
-          onClick={this.handleClickDelete}
-        >
+          onClick={this.handleClickDelete}>
           <FontAwesomeIcon icon='trash-alt' />
-          {' '}
           remove
         </button>
         <div className='Note__dates'>
@@ -68,3 +67,9 @@ export default class Note extends React.Component {
     )
   }
 }
+Note.propTypes = {
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  modified: PropTypes.string.isRequired,
+  onDeleteNote: PropTypes.func.isRequired
+};

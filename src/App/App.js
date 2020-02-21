@@ -11,8 +11,7 @@ import Backbutton from '../Backbutton';
 import config from '../config';
 import ApiContext from '../ApiContext'
 import ErrorBoundary from '../ErrorBoundary'
-//import dummyStore from '../dummy-store';
-//import {getNotesForFolder, findNote, findFolder} from '../notes-helpers';
+
 import './App.css';
 
 class App extends Component {
@@ -21,7 +20,7 @@ class App extends Component {
         folders: []
     };
 
-    componentDidMount() {
+    componentDidMount() { console.log(config)
         Promise.all([
             fetch(`${config.API_ENDPOINT}/notes`),
             fetch(`${config.API_ENDPOINT}/folders`)
@@ -42,17 +41,28 @@ class App extends Component {
             });
     }
 
-    handleDeleteNote = noteId => {
+    handleDeleteNote = (noteId) => {
         this.setState({
             notes: this.state.notes.filter(note => note.id !== noteId)
         });
     };
 
+    handleAddFolder = folder => {
+        this.setState({
+          folders: [...this.state.folders, folder]
+        });
+      };
     
+      handleAddNote = note => {
+        this.setState({
+          notes: [...this.state.notes, note]
+        });
+      };
 
     renderNavRoutes() {
         return (
             <>
+            <ErrorBoundary>
                 {['/', '/folder/:folderId'].map(path => (
                     <Route
                         exact
@@ -64,6 +74,7 @@ class App extends Component {
                 <Route path="/note/:noteId" component={NotePageNav} />
                 <Route path="/add-note" component={Backbutton} />
                 <Route path="/add-folder" component={Backbutton} />
+                </ErrorBoundary>
             </>
         );
     }
@@ -71,6 +82,7 @@ class App extends Component {
     renderMainRoutes() {
         return (
             <>
+            <ErrorBoundary>
                 {['/', '/folder/:folderId'].map(path => (
                     <Route
                         exact
@@ -79,9 +91,10 @@ class App extends Component {
                         component={NoteListMain}
                     />
                 ))}
-                <Route path="/note/noteId" component={NotePageMain}/>
+                <Route path="/note/:noteId" component={NotePageMain}/>
                 <Route path="/add-folder" component={AddFolder}/>
                 <Route path="/add-note" component={AddNote} />
+                </ErrorBoundary>
             </>
         );
     }

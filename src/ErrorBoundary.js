@@ -2,9 +2,10 @@ import React from 'react'
 
 export default class ErrorBoundary extends React.Component {
     state = {error: null};
+
     static getDerivedStateFromError(error) {
         console.error(error);
-        return {error};
+        return error;
     }
     render() {
         if (this.state.error) {
